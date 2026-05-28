@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>破風騎征 報名表</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #BA7517; --gold-light: #EF9F27; --gold-bg: #FAEEDA;
+  --radius: 10px; --radius-sm: 6px;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #F5F5F7; color: #1D1D1F; min-height: 100vh; }
+.container { max-width: 560px; margin: 0 auto; padding: 20px 16px 40px; }
+
+.hero { border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; position: relative; min-height: 180px; background: #111; cursor: pointer; }
+.hero-img { width: 100%; display: block; object-fit: cover; max-height: 220px; opacity: 0.9; }
+.hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 16px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); }
+.meta-row { display: flex; gap: 7px; flex-wrap: wrap; }
+.meta-badge { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.15); border-radius: 999px; padding: 4px 11px; font-size: 11px; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.upload-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+.upload-hint i { font-size: 32px; color: rgba(255,255,255,0.5); }
+.upload-hint span { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+.card { background: #fff; border-radius: var(--radius); padding: 20px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.card-title { font-size: 15px; font-weight: 600; color: #1D1D1F; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.card-title i { color: var(--gold-light); font-size: 18px; }
+
+.section-label { font-size: 11px; font-weight: 600; color: var(--gold); letter-spacing: 0.07em; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--gold-bg); text-transform: uppercase; }
+
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+.req { color: #D00; margin-left: 2px; }
+.field input[type=text], .field input[type=tel] {
+  width: 100%; height: 42px; padding: 0 13px; font-size: 14px;
+  border-radius: var(--radius-sm); border: 1px solid #D8D8D8;
+  background: #FAFAFA; color: #1D1D1F; outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field input:focus { border-color: var(--gold-light); box-shadow: 0 0 0 3px rgba(239,159,39,0.15); background: #fff; }
+
+.date-row { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr; gap: 8px; }
+.dsw { position: relative; }
+.dsw select {
+  width: 100%; height: 42px; padding: 0 32px 0 13px; font-size: 14px;
+  border-radius: var(--radius-sm); border: 1px solid #D8D8D8;
+  background: #FAFAFA; color: #1D1D1F; outline: none;
+  appearance: none; cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.dsw select:focus { border-color: var(--gold-light); box-shadow: 0 0 0 3px rgba(239,159,39,0.15); background: #fff; }
+.dsw select:hover { border-color: #aaa; }
+.dsw::after { content: ''; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid #888; pointer-events: none; }
+
+.radio-group { display: flex; flex-direction: column; gap: 8px; }
+.radio-option { display: flex; align-items: flex-start; gap: 10px; padding: 11px 13px; border-radius: var(--radius-sm); border: 1px solid #D8D8D8; background: #FAFAFA; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.radio-option:hover { border-color: var(--gold-light); }
+.radio-option.selected { border-color: var(--gold-light); background: rgba(239,159,39,0.06); }
+.radio-option input[type=radio] { margin-top: 3px; accent-color: var(--gold); flex-shrink: 0; }
+.radio-label { font-size: 13px; color: #1D1D1F; line-height: 1.5; }
+.radio-sub { font-size: 12px; color: #777; margin-top: 2px; }
+
+.child-section { background: #F8F8F8; border-radius: var(--radius-sm); border: 1px solid #E8E8E8; padding: 14px 14px 4px; margin-top: 10px; }
+.child-note { font-size: 12px; color: #777; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.child-section .field input[type=text] { background: #fff; }
+.child-section .dsw select { background: #fff; }
+
+.error-msg { font-size: 12px; color: #C00; margin-top: 4px; display: none; }
+
+.submit-btn { width: 100%; height: 46px; background: var(--gold); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s, transform 0.1s; }
+.submit-btn:hover { background: #9A6010; }
+.submit-btn:active { transform: scale(0.98); }
+.submit-btn:disabled { background: #C8C8C8; cursor: not-allowed; }
+.footer-note { text-align: center; font-size: 12px; color: #999; margin-top: 10px; }
+
+.success-box { text-align: center; padding: 40px 20px; }
+.success-box h2 { font-size: 22px; font-weight: 600; color: var(--gold); margin-bottom: 8px; }
+.success-box p { font-size: 14px; color: #555; line-height: 1.6; }
+
+.info-row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #F0F0F0; }
+.info-row:last-child { border-bottom: none; padding-bottom: 0; }
+.info-icon { color: var(--gold-light); font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+.info-label { font-size: 11px; color: #999; margin-bottom: 2px; }
+.info-value { font-size: 13px; color: #1D1D1F; line-height: 1.55; }
+.info-link { font-size: 13px; color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.info-link:hover { text-decoration: underline; }
+.info-note { font-size: 12px; color: #666; background: #F8F8F8; border-radius: var(--radius-sm); padding: 10px 12px; margin-top: 10px; line-height: 1.65; }
+
+.transport-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+.transport-row:last-child { margin-bottom: 0; }
+.t-icon { width: 34px; height: 34px; border-radius: var(--radius-sm); background: var(--gold-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.t-icon i { font-size: 17px; color: var(--gold); }
+.t-title { font-size: 13px; font-weight: 600; color: #1D1D1F; margin-bottom: 4px; }
+.t-desc { font-size: 12px; color: #666; line-height: 1.65; }
+
+@media (max-width: 400px) {
+  .date-row { grid-template-columns: 1fr 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero" id="hero-box">
+    <img id="hero-img" class="hero-img" style="display:none" alt="破風騎征" />
+    <div class="upload-hint" id="upload-hint">
+      <i class="ti ti-photo-up"></i>
+      <span>點擊上傳活動圖片</span>
+    </div>
+    <div class="hero-overlay">
+      <div class="meta-row">
+        <div class="meta-badge"><i class="ti ti-calendar"></i> 2025 / 5 / 30</div>
+        <div class="meta-badge"><i class="ti ti-clock"></i> 14:30 集合 · 15:00 出發</div>
+        <div class="meta-badge"><i class="ti ti-map-pin"></i> 碧潭自行車租借站</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="form-view">
+      <div class="card-title"><i class="ti ti-clipboard-list"></i> 破風騎征 報名表</div>
+
+      <div class="section-label">基本資料</div>
+      <div class="field"><label>所屬小組（或邀請人）<span class="req">*</span></label><input type="text" id="group" placeholder="請填寫小組名稱或邀請人姓名" /><div class="error-msg" id="err-group">請填寫所屬小組或邀請人</div></div>
+      <div class="field"><label>姓名<span class="req">*</span></label><input type="text" id="name" placeholder="你的真實姓名" /><div class="error-msg" id="err-name">請輸入姓名</div></div>
+      <div class="field"><label>電話<span class="req">*</span></label><input type="tel" id="phone" placeholder="09xx-xxx-xxx" /><div class="error-msg" id="err-phone">請輸入電話號碼</div></div>
+      <div class="field">
+        <label>出生年月日<span class="req">*</span></label>
+        <div class="date-row">
+          <div class="dsw"><select id="birth-year" onchange="updateDays('birth-year','birth-month','birth-day')"><option value="">選擇年份</option></select></div>
+          <div class="dsw"><select id="birth-month" onchange="updateDays('birth-year','birth-month','birth-day')"><option value="">月</option></select></div>
+          <div class="dsw"><select id="birth-day"><option value="">日</option></select></div>
+        </div>
+        <div class="error-msg" id="err-birthday">請選擇出生年月日</div>
+      </div>
+      <div class="field"><label>身分證字號（供保險使用）<span class="req">*</span></label><input type="text" id="idno" placeholder="例：A123456789" maxlength="10" style="text-transform:uppercase" /><div class="error-msg" id="err-idno">請填寫身分證字號</div></div>
+
+      <div class="section-label">報名項目</div>
+      <div class="field">
+        <div class="radio-group">
+          <label class="radio-option" onclick="selectRadio('category','challenge',this)"><input type="radio" name="category" value="challenge" /><div><div class="radio-label">挑戰組：40公里</div><div class="radio-sub">碧潭 → 大稻埕來回（兩個半小時內）</div></div></label>
+          <label class="radio-option" onclick="selectRadio('category','family',this)"><input type="radio" name="category" value="family" /><div><div class="radio-label">親子休閒組：10公里</div><div class="radio-sub">碧潭 → 公館，吃點心後搭捷運回碧潭合照</div></div></label>
+        </div>
+        <div class="error-msg" id="err-category">請選擇報名項目</div>
+      </div>
+      <div id="child-section" class="child-section" style="display:none">
+        <div class="child-note"><i class="ti ti-info-circle"></i> 親子組請填寫兒童資料</div>
+        <div class="field"><label>兒童姓名</label><input type="text" id="child-name" placeholder="兒童真實姓名" /></div>
+        <div class="field">
+          <label>兒童出生年月日</label>
+          <div class="date-row">
+            <div class="dsw"><select id="child-birth-year" onchange="updateDays('child-birth-year','child-birth-month','child-birth-day')"><option value="">選擇年份</option></select></div>
+            <div class="dsw"><select id="child-birth-month" onchange="updateDays('child-birth-year','child-birth-month','child-birth-day')"><option value="">月</option></select></div>
+            <div class="dsw"><select id="child-birth-day"><option value="">日</option></select></div>
+          </div>
+        </div>
+        <div class="field"><label>兒童身分證字號</label><input type="text" id="child-idno" placeholder="例：A234567890" maxlength="10" style="text-transform:uppercase" /></div>
+      </div>
+
+      <div class="section-label">腳踏車</div>
+      <div class="field">
+        <div class="radio-group">
+          <label class="radio-option" onclick="selectRadio('bike','own',this)"><input type="radio" name="bike" value="own" /><div class="radio-label">是，我有自己的腳踏車</div></label>
+          <label class="radio-option" onclick="selectRadio('bike','rent',this)"><input type="radio" name="bike" value="rent" /><div class="radio-label">否，統一租借</div></label>
+          <label class="radio-option" onclick="selectRadio('bike','ubike',this)"><input type="radio" name="bike" value="ubike" /><div class="radio-label">我會自己租 Ubike！</div></label>
+        </div>
+        <div class="error-msg" id="err-bike">請選擇腳踏車方式</div>
+      </div>
+
+      <button class="submit-btn" id="submit-btn" onclick="handleSubmit()"><i class="ti ti-send"></i> 立刻報名！</button>
+      <p class="footer-note">※ 遇雨則延期｜報名成功後將以電話確認</p>
+    </div>
+    <div class="success-box" id="success-view" style="display:none">
+      <div style="font-size:52px;margin-bottom:12px">🚴</div>
+      <h2>報名成功！</h2>
+      <p>我們已收到你的報名資訊<br>活動前將以電話與你確認，記得接電話喔！</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-bike"></i> 腳踏車租借資訊</div>
+    <div class="info-row"><i class="ti ti-map-pin info-icon"></i><div><div class="info-label">地點</div><div class="info-value">新店碧潭風景區東岸停車場內</div></div></div>
+    <div class="info-row"><i class="ti ti-phone info-icon"></i><div><div class="info-label">電話</div><div class="info-value">02-8911-8854</div></div></div>
+    <div class="info-row"><i class="ti ti-train info-icon"></i><div><div class="info-label">交通</div><div class="info-value">搭捷運松山新店線到「新店站」，出站後往碧潭風景區方向走，右轉過高速公路橋下往東岸停車場即可</div></div></div>
+    <div class="info-row"><i class="ti ti-receipt info-icon"></i><div><div class="info-label">租借費用</div><a class="info-link" href="https://www.cycling-lifestyle.org.tw/bike_info" target="_blank">查看費用明細 <i class="ti ti-external-link" style="font-size:12px"></i></a></div></div>
+    <div class="info-note"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>新北河濱租借站支援「甲借乙還」，需填租借單並出示有效雙證件與手機號碼。費用為原租借費加運費，多數車款加收 $110，協力車、e-Bike、親子電動輔助車等加收 $140。</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><i class="ti ti-map-2"></i> 交通資訊</div>
+    <div style="font-size:13px;color:#777;margin-bottom:14px;display:flex;align-items:center;gap:6px;"><i class="ti ti-flag" style="color:var(--gold)"></i> 集合地點：碧潭自行車租借站</div>
+    <div class="transport-row"><div class="t-icon"><i class="ti ti-car"></i></div><div><div class="t-title">自行開車</div><div class="t-desc">行駛新店區北新路到達捷運新店站，車輛停放捷運站停車場，步行進入碧潭風景區後右轉過高速公路橋下往東岸停車場即可到達。</div></div></div>
+    <div class="transport-row"><div class="t-icon"><i class="ti ti-train"></i></div><div><div class="t-title">捷運</div><div class="t-desc">搭乘松山新店線（3號線）於新店站下車，出站後往左後方行走，進入碧潭風景區後右轉過高速公路橋下往東岸停車場即可到達。</div></div></div>
+  </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwe85Q-ZHC0fnj1L95d1vEll5IzMq5S7ObeikbvcmYseQcno_pL68_mgY5d-LzxAwI6/exec';
+
+function initDateSelects() {
+  const cur = new Date().getFullYear();
+  ['birth-year','child-birth-year'].forEach(id => {
+    const s = document.getElementById(id);
+    for (let y = cur; y >= 1930; y--) { const o = document.createElement('option'); o.value=y; o.textContent=y+' 年'; s.appendChild(o); }
+  });
+  ['birth-month','child-birth-month'].forEach(id => {
+    const s = document.getElementById(id);
+    for (let m = 1; m <= 12; m++) { const o = document.createElement('option'); o.value=m; o.textContent=m+' 月'; s.appendChild(o); }
+  });
+  updateDays('birth-year','birth-month','birth-day');
+  updateDays('child-birth-year','child-birth-month','child-birth-day');
+}
+
+function updateDays(yId, mId, dId) {
+  const y=parseInt(document.getElementById(yId).value)||2000;
+  const m=parseInt(document.getElementById(mId).value)||1;
+  const days=new Date(y,m,0).getDate();
+  const sel=document.getElementById(dId); const cur=sel.value;
+  sel.innerHTML='<option value="">日</option>';
+  for (let d=1;d<=days;d++) { const o=document.createElement('option'); o.value=d; o.textContent=d+' 日'; if(d==cur) o.selected=true; sel.appendChild(o); }
+}
+
+document.getElementById('hero-box').addEventListener('click', () => {
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+  inp.onchange=e => {
+    const f=e.target.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=ev=>{
+      const img=document.getElementById('hero-img'); img.src=ev.target.result; img.style.display='block';
+      document.getElementById('upload-hint').style.display='none';
+    }; r.readAsDataURL(f);
+  }; inp.click();
+});
+
+function selectRadio(name, value, el) {
+  document.querySelectorAll('input[name="'+name+'"]').forEach(r=>r.closest('.radio-option').classList.remove('selected'));
+  el.classList.add('selected'); el.querySelector('input').checked=true;
+  if (name==='category') document.getElementById('child-section').style.display=value==='family'?'block':'none';
+}
+
+function getVal(id) { return (document.getElementById(id)||{}).value?.trim()||''; }
+function showErr(id, show) { const el=document.getElementById(id); if(el) el.style.display=show?'block':'none'; }
+function getBday(yId,mId,dId) { const y=getVal(yId),m=getVal(mId),d=getVal(dId); if(!y||!m||!d) return ''; return y+'/'+String(m).padStart(2,'0')+'/'+String(d).padStart(2,'0'); }
+
+async function handleSubmit() {
+  let valid=true;
+  [['group','err-group'],['name','err-name'],['phone','err-phone'],['idno','err-idno']].forEach(([id,err])=>{ const ok=getVal(id).length>0; showErr(err,!ok); if(!ok) valid=false; });
+  const bday=getBday('birth-year','birth-month','birth-day'); showErr('err-birthday',!bday); if(!bday) valid=false;
+  const cat=document.querySelector('input[name="category"]:checked')?.value||'';
+  const bike=document.querySelector('input[name="bike"]:checked')?.value||'';
+  showErr('err-category',!cat); if(!cat) valid=false;
+  showErr('err-bike',!bike); if(!bike) valid=false;
+  if(!valid) return;
+
+  const btn=document.getElementById('submit-btn'); btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> 送出中...';
+  const payload={ group:getVal('group'),name:getVal('name'),phone:getVal('phone'),birthday:bday,idno:getVal('idno'), category:cat==='challenge'?'挑戰組 40km':'親子休閒組 10km', bike:bike==='own'?'自備腳踏車':bike==='rent'?'統一租借':'自租Ubike', child_name:getVal('child-name'),child_birthday:getBday('child-birth-year','child-birth-month','child-birth-day'),child_idno:getVal('child-idno') };
+  try {
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    document.getElementById('form-view').style.display='none'; document.getElementById('success-view').style.display='block';
+  } catch {
+    btn.disabled=false; btn.innerHTML='<i class="ti ti-send"></i> 立刻報名！'; alert('送出失敗，請稍後再試');
+  }
+}
+
+initDateSelects();
+</script>
+</body>
+</html>
